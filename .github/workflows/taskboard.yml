@@ -26,7 +26,7 @@ jobs:
             echo "WORK_ITEM_ID=$ID" >> $GITHUB_ENV
             echo "Detectado WORK_ITEM_ID=$ID"
     
-    #Azure DevOps
+    #Azure DevOps.
       - name: Actualizar Azure Board
         if: env.WORK_ITEM_ID != ''
         env:
