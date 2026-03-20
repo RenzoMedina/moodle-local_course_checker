@@ -27,5 +27,5 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['course_checker:view'] = 'Ver informe del verificador de cursos';
 $string['pluginname'] = 'Revisión de Cursos';
-$string['pluginname:view'] = 'Ver Revisión de Cursos';
 $string['pluginname:link'] = 'Informe de Revisión de Cursos';
+$string['pluginname:view'] = 'Ver Revisión de Cursos';

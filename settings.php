@@ -32,7 +32,7 @@ if ($hassiteconfig) {
     if ($ADMIN->fulltree) {
         // TO-DO: Define actual plugin settings page and add it to the tree - {@link https://docs.moodle.org/dev/Admin_settings}.
     }
-    $ADMIN->add('reports', new admin_category('local_course_checker_users', get_string('pluginname:view', 'local_course_checker')));
+    $ADMIN->add('reports', new admin_category('local_course_checker_users', get_string('pluginname', 'local_course_checker')));
     $ADMIN->add('local_course_checker_users', new admin_externalpage(
         'local_course_checker',
         get_string('pluginname:link', 'local_course_checker'),
