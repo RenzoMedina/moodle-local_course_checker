@@ -27,3 +27,5 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['course_checker:view'] = 'View course checker report';
 $string['pluginname'] = 'Course Checker';
+$string['pluginname:view'] = 'View Course Checker';
+$string['pluginname:link'] = 'Course Checker Report';
