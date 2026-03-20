@@ -1,6 +1,6 @@
 # Course Checker #
 
-TO-DO Describe the plugin shortly here.
+Course Checker is a Moodle plugin that automates the review of courses before they are published. Its purpose is to save time for administrators and course managers by detecting common issues in activities and sections without having to open each resource manually.
 
 TO-DO Provide more detailed description here.
 
