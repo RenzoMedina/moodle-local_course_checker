@@ -23,7 +23,7 @@
  */
 
 require_once(__DIR__ . '/../../config.php');
-
+global $DB;
 require_login();
 require_capability('moodle/site:config', context_system::instance());
 
@@ -33,10 +33,28 @@ $PAGE->set_title(get_string('pluginname', 'local_course_checker'));
 $PAGE->set_heading(get_string('pluginname', 'local_course_checker'));
 
 use local_course_checker\form\search;
-
+$courseshortname = optional_param('search', '', PARAM_TEXT);
+$coursefullname = optional_param('fullname', '', PARAM_TEXT);
 $mform = new search();
+if ($mform->is_cancelled()) {
+    redirect(new moodle_url('/admin/search.php#linkreports'));
+} else if ($data = $mform->get_data()) {
+    $courseshortname = $data->search;
+    $coursefullname = $data->fullname;
+}
+$sql = "SELECT id, shortname, fullname FROM {course} WHERE shortname LIKE :shortname AND fullname LIKE :fullname";
+if ($courseshortname || $coursefullname) {
+    $params = [
+        'shortname' => '%' . $courseshortname . '%',
+        'fullname' => '%' . $coursefullname . '%',
+    ];
+    $courses = $DB->get_records_sql($sql, $params);
+    var_dump($courses);
+}
+
+$template = [
+    'search_form' => $mform->render(),
+];
 echo $OUTPUT->header();
-
-$mform->display();
-
+echo $OUTPUT->render_from_template('local_course_checker/main', $template);
 echo $OUTPUT->footer();
