@@ -26,12 +26,12 @@ jobs:
             echo "WORK_ITEM_ID=$ID" >> $GITHUB_ENV
             echo "Detectado WORK_ITEM_ID=$ID"
     
-    #Azure DevOps
+    #Azure DevOps.
       - name: Actualizar Azure Board
         if: env.WORK_ITEM_ID != ''
         env:
-          AZDO_ORG: CodeRenzo
-          AZDO_PROJECT: SistemaAdministrable
+          AZDO_ORG: Moodle-Plugins
+          AZDO_PROJECT: CourseChecker
           AZDO_PAT: ${{ secrets.AZDO_PAT }}
         run: |
           curl --request PATCH \
