@@ -26,6 +26,11 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['course_checker:view'] = 'Ver informe del verificador de cursos';
+$string['coursefullname'] = 'Nombre completo del curso';
+$string['coursefullname_help'] = 'Ingrese el nombre completo del curso que desea verificar.';
+$string['courseshortname'] = 'Nombre corto del curso';
+$string['courseshortname_help'] = 'Ingrese el nombre corto del curso que desea verificar.';
 $string['pluginname'] = 'Revisión de Cursos';
 $string['pluginname:link'] = 'Informe de Revisión de Cursos';
 $string['pluginname:view'] = 'Ver Revisión de Cursos';
+$string['search'] = 'Buscar';

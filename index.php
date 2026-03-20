@@ -32,6 +32,11 @@ $PAGE->set_url(new moodle_url('/local/course_checker/index.php'));
 $PAGE->set_title(get_string('pluginname', 'local_course_checker'));
 $PAGE->set_heading(get_string('pluginname', 'local_course_checker'));
 
+use local_course_checker\form\search;
+
+$mform = new search();
 echo $OUTPUT->header();
+
+$mform->display();
 
 echo $OUTPUT->footer();
