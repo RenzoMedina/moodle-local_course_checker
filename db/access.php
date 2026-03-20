@@ -25,12 +25,12 @@
 defined('MOODLE_INTERNAL') || die();
 
 $capabilities = [
-	'local/course_checker:view' => [
-		'captype' => 'read',
-		'contextlevel' => CONTEXT_SYSTEM,
-		'archetypes' => [
-			'manager' => CAP_ALLOW,
-		],
-		'clonepermissionsfrom' => 'moodle/site:viewreports',
-	],
+    'local/course_checker:view' => [
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => [
+            'manager' => CAP_ALLOW,
+        ],
+        'clonepermissionsfrom' => 'moodle/site:viewreports',
+    ],
 ];
