@@ -1,0 +1,41 @@
+name: Course Checker Taskboard to Azure DevOps
+
+on:
+  push:
+    branches:
+      - dev/**
+  workflow_dispatch:
+        
+permissions:
+  contents: read
+
+jobs:
+  azureboards:
+    runs-on: ubuntu-latest
+    steps:
+    #obteniendo el commit
+      - name: Obtener mensaje del commit
+        id: obtener-msg
+        run: |
+          echo "COMMIT_MSG=${{ github.event.head_commit.message }}" >> $GITHUB_ENV
+
+      - name: Extraer ID del Work Item (formato AB#1234)
+        id: extraer-id
+        run: |
+            ID=$(echo "$COMMIT_MSG" | grep -o 'AB#[0-9]*' | grep -o '[0-9]*' || true)
+            echo "WORK_ITEM_ID=$ID" >> $GITHUB_ENV
+            echo "Detectado WORK_ITEM_ID=$ID"
+    
+    #Azure DevOps
+      - name: Actualizar Azure Board
+        if: env.WORK_ITEM_ID != ''
+        env:
+          AZDO_ORG: CodeRenzo
+          AZDO_PROJECT: SistemaAdministrable
+          AZDO_PAT: ${{ secrets.AZDO_PAT }}
+        run: |
+          curl --request PATCH \
+            --url https://dev.azure.com/$AZDO_ORG/$AZDO_PROJECT/_apis/wit/workitems/$WORK_ITEM_ID?api-version=6.0 \
+            --header "Content-Type: application/json-patch+json" \
+            --user :$AZDO_PAT \
+            --data '[{ "op": "add", "path": "/fields/System.State", "value": "Done" }]'
