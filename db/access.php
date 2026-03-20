@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - https://moodle.org/
+// This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,18 +12,25 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin strings are defined here.
+ * Capability definitions for this module.
  *
- * @package     local_course_checker
- * @category    string
- * @copyright   2026 Renzo Medina <medinast30@gmail.com>
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   local_course_checker
+ * @copyright 2026, Renzo Medina <medinast30@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['course_checker:view'] = 'View course checker report';
-$string['pluginname'] = 'Course Checker';
+$capabilities = [
+	'local/course_checker:view' => [
+		'captype' => 'read',
+		'contextlevel' => CONTEXT_SYSTEM,
+		'archetypes' => [
+			'manager' => CAP_ALLOW,
+		],
+		'clonepermissionsfrom' => 'moodle/site:viewreports',
+	],
+];
