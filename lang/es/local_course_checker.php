@@ -15,17 +15,22 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
+ * Plugin strings are defined here.
  *
  * @package     local_course_checker
+ * @category    string
  * @copyright   2026 Renzo Medina <medinast30@gmail.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'local_course_checker';
-$plugin->release = '0.1.0';
-$plugin->version = 2026031902;
-$plugin->requires = 2022112800;
-$plugin->maturity = MATURITY_ALPHA;
+$string['course_checker:view'] = 'Ver informe del verificador de cursos';
+$string['coursefullname'] = 'Nombre completo del curso';
+$string['coursefullname_help'] = 'Ingrese el nombre completo del curso que desea verificar.';
+$string['courseshortname'] = 'Nombre corto del curso';
+$string['courseshortname_help'] = 'Ingrese el nombre corto del curso que desea verificar.';
+$string['pluginname'] = 'Revisión de Cursos';
+$string['pluginname:link'] = 'Informe de Revisión de Cursos';
+$string['pluginname:view'] = 'Ver Revisión de Cursos';
+$string['search'] = 'Buscar';

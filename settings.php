@@ -26,10 +26,17 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
-    $settings = new admin_settingpage('local_course_checker_settings', new lang_string('pluginname', 'local_course_checker'));
+    $settings = new admin_settingpage('local_course_checker_settings', get_string('pluginname', 'local_course_checker'));
 
     // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedIf
     if ($ADMIN->fulltree) {
         // TO-DO: Define actual plugin settings page and add it to the tree - {@link https://docs.moodle.org/dev/Admin_settings}.
     }
+    $ADMIN->add('reports', new admin_category('local_course_checker_users', get_string('pluginname', 'local_course_checker')));
+    $ADMIN->add('local_course_checker_users', new admin_externalpage(
+        'local_course_checker',
+        get_string('pluginname:link', 'local_course_checker'),
+        new moodle_url('/local/course_checker/index.php'),
+        'moodle/site:config'
+    ));
 }
