@@ -24,8 +24,6 @@
 
 namespace local_course_checker\checker;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Link checker class for Course Checker plugin.
  * @package   local_course_checker
@@ -45,11 +43,30 @@ class link_checker {
         $results = [];
         foreach ($pages as $page) {
             $html = $page->content . ' ' . $page->intro;
-            preg_match_all('/https?:\/\/[^\s"\'<>]+/i', $html, $matches);
-            foreach ($matches[0] as $url) {
+            preg_match_all('/<a[^>]+href="([^"]+)"[^>]*>(.*?)<\/a>/is', $html, $matches);
+            foreach ($matches[1] as $index => $url) {
+                if (strpos($url, 'http') !== 0) {
+                    continue; // Skip non-HTTP links.
+                }
+                $curl = new \curl();
+                $curl->setopt([
+                    'CURLOPT_TIMEOUT' => 5,
+                    'CURLOPT_FOLLOWLOCATION' => true,
+                    'CURLOPT_NOBODY' => true,
+                ]);
+                $curl->head($url);
+                $info = $curl->get_info();
+                $statuscode = $info['http_code'] ?? 0;
+                $linktext = strip_tags($matches[2][$index]);
+                $linktext = trim($linktext);
+                $linktext = !empty($linktext) ? $linktext : $url;
                 $results[] = [
                     'url'          => $url,
+                    'linktext'     => $linktext,
                     'activityname' => $page->name,
+                    'statuscode'   => $statuscode,
+                    'isbroken'     => $statuscode == 0 || $statuscode >= 400,
+                    'isok'         => $statuscode >= 200 && $statuscode < 300,
                 ];
             }
         }
