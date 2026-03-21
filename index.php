@@ -53,6 +53,7 @@ if ($courseshortname || $coursefullname) {
 }
 
 $template = [
+    'back_url' => new moodle_url('/admin/search.php#linkreports'),
     'search_form' => $mform->render(),
 ];
 echo $OUTPUT->header();
