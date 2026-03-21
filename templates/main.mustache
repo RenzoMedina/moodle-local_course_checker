@@ -15,14 +15,15 @@
 	along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
+	@template local_course_checker/main
+	Template for the main page of the course checker plugin.
 
+	Example context (json):
+	{
+		"search_form": "<form>...</form>"
+	}
 }}
 <div class="container-fluid">
-	<div class="row float-right">
-		<div class="col-md ">
-			<a href="{{{ back_url }}}" class="btn btn-info">{{#str}}back{{/str}}</a>
-		</div>
-	</div>
 	<div class="row">
 		<div class="col-md-12">
 			{{{ search_form }}}

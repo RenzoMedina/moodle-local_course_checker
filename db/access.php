@@ -33,4 +33,11 @@ $capabilities = [
         ],
         'clonepermissionsfrom' => 'moodle/site:viewreports',
     ],
+    'local/course_checker:use' => [
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => [
+            'manager' => CAP_ALLOW,
+        ],
+    ],
 ];
