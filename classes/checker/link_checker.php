@@ -15,36 +15,44 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Course Checker search form.
+ * Course Checker plugin link checker class.
  *
  * @package   local_course_checker
  * @copyright 2026, Renzo Medina <medinast30@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_course_checker\form;
+namespace local_course_checker\checker;
+
 defined('MOODLE_INTERNAL') || die();
-require_once($CFG->libdir . '/formslib.php');
 
 /**
- * Course Checker search form.
+ * Link checker class for Course Checker plugin.
  * @package   local_course_checker
  * @copyright 2026, Renzo Medina <medinast30@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class search extends \moodleform {
-    /**
-     * Form definition.
-     */
-    public function definition() {
-        $mform = $this->_form;
+class link_checker {
 
-        $mform->addElement('text', 'search', get_string('courseshortname', 'local_course_checker'));
-        $mform->setType('search', PARAM_TEXT);
-        $mform->addHelpButton('search', 'courseshortname', 'local_course_checker');
-        $mform->addElement('text',  'fullname',  get_string('coursefullname', 'local_course_checker'));
-        $mform->setType('fullname', PARAM_TEXT);
-        $mform->addHelpButton('fullname', 'coursefullname', 'local_course_checker');
-        $mform->addElement('submit', 'submitbutton', get_string('search', 'local_course_checker'));
+    /**
+     * Checks for links in course pages.
+     * @param mixed $courseid
+     * @return array []
+     */
+    public function check($courseid) {
+        global $DB;
+        $pages = $DB->get_records('page', ['course' => $courseid], '', 'id, name, content, intro' );
+        $results = [];
+        foreach ($pages as $page) {
+            $html = $page->content . ' ' . $page->intro;
+            preg_match_all('/https?:\/\/[^\s"\'<>]+/i', $html, $matches);
+            foreach ($matches[0] as $url) {
+                $results[] = [
+                    'url'          => $url,
+                    'activityname' => $page->name,
+                ];
+            }
+        }
+        return $results;
     }
 }

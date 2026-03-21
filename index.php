@@ -33,6 +33,7 @@ $PAGE->set_title(get_string('pluginname', 'local_course_checker'));
 $PAGE->set_heading(get_string('pluginname', 'local_course_checker'));
 
 use local_course_checker\form\search;
+use local_course_checker\checker\link_checker;
 $courseshortname = optional_param('search', '', PARAM_TEXT);
 $coursefullname = optional_param('fullname', '', PARAM_TEXT);
 $mform = new search();
@@ -49,7 +50,10 @@ if ($courseshortname || $coursefullname) {
         'fullname' => '%' . $coursefullname . '%',
     ];
     $courses = $DB->get_records_sql($sql, $params);
-    var_dump($courses);
+    $courseid = (int)reset($courses)->id;
+    $checker = new link_checker();
+    $results = $checker->check($courseid);
+    var_dump($results);
 }
 
 $template = [
