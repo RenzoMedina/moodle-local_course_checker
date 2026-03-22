@@ -39,10 +39,51 @@ class link_checker {
      */
     public function check($courseid) {
         global $DB;
-        $pages = $DB->get_records('page', ['course' => $courseid], '', 'id, name, content, intro');
+        $modinfo = get_fast_modinfo((int)$courseid);
         $results = [];
-        foreach ($pages as $page) {
-            $html = $page->content . ' ' . $page->intro;
+        foreach ($modinfo->cms as $cm) {
+            $html = '';
+            switch ($cm->modname) {
+                case 'page':
+                    $record = $DB->get_record('page', ['id' => $cm->instance], 'id, name, content, intro');
+                    if ($record) {
+                        $html = $record->content . ' ' . $record->intro;
+                    }
+                    break;
+                case 'assign':
+                    $record = $DB->get_record('assign', ['id' => $cm->instance], 'id, name, intro');
+                    if ($record) {
+                        $html = $record->intro;
+                    }
+                    break;
+                case 'forum':
+                    $record = $DB->get_record('forum', ['id' => $cm->instance], 'id, name, intro');
+                    if ($record) {
+                        $html = $record->intro;
+                    }
+                    break;
+                case 'url':
+                    $record = $DB->get_record('url', ['id' => $cm->instance], 'id, name, externalurl, intro');
+                    if ($record) {
+                        $html = $record->externalurl . ' ' . $record->intro;
+                    }
+                    break;
+                case 'quiz':
+                    $record = $DB->get_record('quiz', ['id' => $cm->instance], 'id, name, intro');
+                    if ($record) {
+                        $html = $record->intro;
+                    }
+                    break;
+                case 'resource':
+                    $record = $DB->get_record('resource', ['id' => $cm->instance], 'id, name, content, intro');
+                    if ($record) {
+                        $html = $record->content . ' ' . $record->intro;
+                    }
+                    break;
+            }
+            if (empty($html)) {
+                continue;
+            }
             preg_match_all('/<a[^>]+href="([^"]+)"[^>]*>(.*?)<\/a>/is', $html, $matches);
             foreach ($matches[1] as $index => $url) {
                 if (strpos($url, 'http') !== 0) {
@@ -63,7 +104,8 @@ class link_checker {
                 $results[] = [
                     'url'          => $url,
                     'linktext'     => $linktext,
-                    'activityname' => $page->name,
+                    'activityname' => $cm->name,
+                    'modtypelabel' => get_string('modulename', $cm->modname),
                     'statuscode'   => $statuscode,
                     'isbroken'     => $statuscode == 0 || $statuscode >= 400,
                     'isok'         => $statuscode >= 200 && $statuscode < 300,
