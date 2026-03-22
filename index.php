@@ -36,6 +36,10 @@ use local_course_checker\form\search;
 use local_course_checker\checker\link_checker;
 $courseshortname = optional_param('search', '', PARAM_TEXT);
 $coursefullname = optional_param('fullname', '', PARAM_TEXT);
+$perpage = (int)get_config('local_course_checker', 'maxresults') ?: 8;
+$page = optional_param('page', 0, PARAM_INT);
+$paginationbar = new paging_bar(0, 0, $perpage, $PAGE->url);
+$total = 0;
 $mform = new search();
 if ($mform->is_cancelled()) {
     redirect(new moodle_url('/admin/search.php#linkreports'));
@@ -43,22 +47,30 @@ if ($mform->is_cancelled()) {
     $courseshortname = $data->search;
     $coursefullname = $data->fullname;
 }
-$sql = "SELECT id, shortname, fullname FROM {course} WHERE shortname LIKE :shortname AND fullname LIKE :fullname";
+$mform->set_data(['search' => $courseshortname, 'fullname' => $coursefullname]);
+$sql = "SELECT id, shortname, fullname FROM {course} WHERE shortname = :shortname OR fullname = :fullname";
 if ($courseshortname || $coursefullname) {
     $params = [
-        'shortname' => '%' . $courseshortname . '%',
-        'fullname' => '%' . $coursefullname . '%',
+        'shortname' =>  $courseshortname,
+        'fullname' =>  $coursefullname,
     ];
     $courses = $DB->get_records_sql($sql, $params);
     $courseid = (int)reset($courses)->id;
     $checker = new link_checker();
-    $results = $checker->check($courseid);
-    var_dump($results);
+    $allresults = $checker->check($courseid);
+    $total = count($allresults);
+    $results = array_slice($allresults, $page * $perpage, $perpage);
+    $paginationbar = new paging_bar($total, $page, $perpage,
+        new moodle_url('/local/course_checker/index.php', ['search' => $courseshortname, 'fullname' => $coursefullname])
+    );
 }
 
 $template = [
     'back_url' => new moodle_url('/admin/search.php#linkreports'),
     'search_form' => $mform->render(),
+    'results' => $results ?? [],
+    'haspagination' => $total > $perpage,
+    'pagination' =>$OUTPUT->render($paginationbar),
 ];
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('local_course_checker/main', $template);

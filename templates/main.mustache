@@ -20,7 +20,16 @@
 
 	Example context (json):
 	{
-		"search_form": "<form>...</form>"
+		"search_form": "<form>...</form>",
+		"results": [
+			{
+				"activityname": "Page 1",
+				"linktext": "Google",
+				"url": "https://www.google.com",
+				"isbroken": false,
+				"isok": true
+			}
+		]
 	}
 }}
 <div class="container-fluid">
@@ -30,3 +39,35 @@
 		</div>
 	</div>
 </div>
+<table class="table table-striped mt-4">
+	<thead>
+		<tr>
+			<th>{{#str}}activityname, local_course_checker{{/str}}</th>
+			<th>{{#str}}linktext, local_course_checker{{/str}}</th>
+			<th>{{#str}}url, local_course_checker{{/str}}</th>
+			<th>{{#str}}status, local_course_checker{{/str}}</th>
+		</tr>
+	</thead>
+	<tbody>
+		{{#results}}
+		<tr class="{{#isbroken}}text-danger{{/isbroken}}{{#isok}}text-black{{/isok}}">
+			<td>{{activityname}}</td>
+			<td>{{linktext}}</td>
+			<td><a href="{{url}}" target="_blank" class="{{#isbroken}}text-danger{{/isbroken}}{{#isok}}text-black{{/isok}}">{{url}}</a></td>
+			<td>{{#isbroken}}{{#str}}no, local_course_checker{{/str}}{{/isbroken}}{{#isok}}{{#str}}yes, local_course_checker{{/str}}{{/isok}}</td>
+		</tr>
+		{{/results}}
+		{{^results}}
+		<tr>
+			<td colspan="4" class="text-center">{{#str}}nolinksfound, local_course_checker{{/str}}</td>
+		</tr>
+		{{/results}}
+	</tbody>
+</table>
+{{#haspagination}}
+    <div class="row mt-3">
+        <div class="col-12">
+            {{{pagination}}}
+        </div>
+    </div>
+{{/haspagination}}

@@ -39,7 +39,7 @@ class link_checker {
      */
     public function check($courseid) {
         global $DB;
-        $pages = $DB->get_records('page', ['course' => $courseid], '', 'id, name, content, intro' );
+        $pages = $DB->get_records('page', ['course' => $courseid], '', 'id, name, content, intro');
         $results = [];
         foreach ($pages as $page) {
             $html = $page->content . ' ' . $page->intro;
