@@ -24,8 +24,6 @@
 
 namespace local_course_checker\checker;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Link checker class for Course Checker plugin.
  * @package   local_course_checker
@@ -41,15 +39,76 @@ class link_checker {
      */
     public function check($courseid) {
         global $DB;
-        $pages = $DB->get_records('page', ['course' => $courseid], '', 'id, name, content, intro' );
+        $modinfo = get_fast_modinfo((int)$courseid);
         $results = [];
-        foreach ($pages as $page) {
-            $html = $page->content . ' ' . $page->intro;
-            preg_match_all('/https?:\/\/[^\s"\'<>]+/i', $html, $matches);
-            foreach ($matches[0] as $url) {
+        foreach ($modinfo->cms as $cm) {
+            $html = '';
+            switch ($cm->modname) {
+                case 'page':
+                    $record = $DB->get_record('page', ['id' => $cm->instance], 'id, name, content, intro');
+                    if ($record) {
+                        $html = $record->content . ' ' . $record->intro;
+                    }
+                    break;
+                case 'assign':
+                    $record = $DB->get_record('assign', ['id' => $cm->instance], 'id, name, intro');
+                    if ($record) {
+                        $html = $record->intro;
+                    }
+                    break;
+                case 'forum':
+                    $record = $DB->get_record('forum', ['id' => $cm->instance], 'id, name, intro');
+                    if ($record) {
+                        $html = $record->intro;
+                    }
+                    break;
+                case 'url':
+                    $record = $DB->get_record('url', ['id' => $cm->instance], 'id, name, externalurl, intro');
+                    if ($record) {
+                        $html = $record->externalurl . ' ' . $record->intro;
+                    }
+                    break;
+                case 'quiz':
+                    $record = $DB->get_record('quiz', ['id' => $cm->instance], 'id, name, intro');
+                    if ($record) {
+                        $html = $record->intro;
+                    }
+                    break;
+                case 'resource':
+                    $record = $DB->get_record('resource', ['id' => $cm->instance], 'id, name, content, intro');
+                    if ($record) {
+                        $html = $record->content . ' ' . $record->intro;
+                    }
+                    break;
+            }
+            if (empty($html)) {
+                continue;
+            }
+            preg_match_all('/<a[^>]+href="([^"]+)"[^>]*>(.*?)<\/a>/is', $html, $matches);
+            foreach ($matches[1] as $index => $url) {
+                if (strpos($url, 'http') !== 0) {
+                    continue; // Skip non-HTTP links.
+                }
+                $curl = new \curl();
+                $curl->setopt([
+                    'CURLOPT_TIMEOUT' => 5,
+                    'CURLOPT_FOLLOWLOCATION' => true,
+                    'CURLOPT_NOBODY' => true,
+                ]);
+                $curl->head($url);
+                $info = $curl->get_info();
+                $statuscode = $info['http_code'] ?? 0;
+                $linktext = strip_tags($matches[2][$index]);
+                $linktext = trim($linktext);
+                $linktext = !empty($linktext) ? $linktext : $url;
                 $results[] = [
                     'url'          => $url,
-                    'activityname' => $page->name,
+                    'linktext'     => $linktext,
+                    'activityname' => $cm->name,
+                    'modtypelabel' => get_string('modulename', $cm->modname),
+                    'statuscode'   => $statuscode,
+                    'isbroken'     => $statuscode == 0 || $statuscode >= 400,
+                    'isok'         => $statuscode >= 200 && $statuscode < 300,
                 ];
             }
         }

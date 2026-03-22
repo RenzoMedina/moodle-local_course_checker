@@ -25,12 +25,20 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['activityname'] = 'Nombre de la actividad';
 $string['course_checker:view'] = 'Ver informe del verificador de cursos';
 $string['coursefullname'] = 'Nombre completo del curso';
 $string['coursefullname_help'] = 'Ingrese el nombre completo del curso que desea verificar.';
-$string['courseshortname'] = 'Nombre corto del curso';
-$string['courseshortname_help'] = 'Ingrese el nombre corto del curso que desea verificar.';
+$string['courseshortname'] = 'Código del curso';
+$string['courseshortname_help'] = 'Ingrese el código del curso que desea verificar.';
+$string['linktext'] = 'Texto del enlace';
+$string['modtype'] = 'Tipo de módulo';
+$string['no'] = ' ❌ No';
+$string['nolinksfound'] = 'No se encontraron enlaces en este curso.';
 $string['pluginname'] = 'Revisión de Cursos';
 $string['pluginname:link'] = 'Informe de Revisión de Cursos';
 $string['pluginname:view'] = 'Ver Revisión de Cursos';
 $string['search'] = 'Buscar';
+$string['status'] = 'Estado';
+$string['url'] = 'URL';
+$string['yes'] = ' ✔️ Sí';

@@ -25,12 +25,20 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['activityname'] = 'Activity Name';
 $string['course_checker:view'] = 'View course checker report';
 $string['coursefullname'] = 'Course full name';
 $string['coursefullname_help'] = 'Enter the full name of the course you want to check.';
-$string['courseshortname'] = 'Course short name';
-$string['courseshortname_help'] = 'Enter the short name of the course you want to check.';
+$string['courseshortname'] = 'Course code';
+$string['courseshortname_help'] = 'Enter the code of the course you want to check.';
+$string['linktext'] = 'Link Text';
+$string['modtype'] = 'Module Type';
+$string['nolinksfound'] = 'No links found in this course.';
+$string['no'] = '❌ No';
 $string['pluginname'] = 'Course Checker';
 $string['pluginname:link'] = 'Course Checker Report';
 $string['pluginname:view'] = 'View Course Checker';
 $string['search'] = 'Search';
+$string['status'] = 'Status';
+$string['url'] = 'URL';
+$string['yes'] = '✔️ Yes';
