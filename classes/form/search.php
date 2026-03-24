@@ -42,7 +42,7 @@ class search extends \moodleform {
         $mform->addElement('text', 'search', get_string('courseshortname', 'local_course_checker'));
         $mform->setType('search', PARAM_TEXT);
         $mform->addHelpButton('search', 'courseshortname', 'local_course_checker');
-        $mform->addElement('text',  'fullname',  get_string('coursefullname', 'local_course_checker'));
+        $mform->addElement('text', 'fullname', get_string('coursefullname', 'local_course_checker'));
         $mform->setType('fullname', PARAM_TEXT);
         $mform->addHelpButton('fullname', 'coursefullname', 'local_course_checker');
         $mform->addElement('submit', 'submitbutton', get_string('search', 'local_course_checker'));

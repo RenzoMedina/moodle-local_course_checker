@@ -26,11 +26,10 @@
 /**
  * Extends the course navigation menu to include a link to the course checker report.
  * @param mixed $navigation
- * @param mixed $coursenode
  * @param mixed $context
  * @return void
  */
-function local_course_checker_extend_navigation_course($navigation, $coursenode, $context) {
+function local_course_checker_extend_navigation_course($navigation, $context) {
     if (!has_capability('local/course_checker:use', $context)) {
         return;
     }
@@ -45,4 +44,3 @@ function local_course_checker_extend_navigation_course($navigation, $coursenode,
     );
     $navigation->add_node($node);
 }
-
