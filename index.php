@@ -51,10 +51,14 @@ $mform->set_data(['search' => $courseshortname, 'fullname' => $coursefullname]);
 $sql = "SELECT id, shortname, fullname FROM {course} WHERE shortname = :shortname OR fullname = :fullname";
 if ($courseshortname || $coursefullname) {
     $params = [
-        'shortname' =>  $courseshortname,
-        'fullname' =>  $coursefullname,
+        'shortname' => $courseshortname,
+        'fullname' => $coursefullname,
     ];
     $courses = $DB->get_records_sql($sql, $params);
+    if (!$courses) {
+        \core\notification::add(get_string('nocoursesfound', 'local_course_checker'), \core\output\notification::NOTIFY_ERROR);
+        redirect(new moodle_url('/local/course_checker/index.php'));
+    }
     $courseid = (int)reset($courses)->id;
     $checker = new link_checker();
     $allresults = $checker->check($courseid);
@@ -70,7 +74,7 @@ $template = [
     'search_form' => $mform->render(),
     'results' => $results ?? [],
     'haspagination' => $total > $perpage,
-    'pagination' =>$OUTPUT->render($paginationbar),
+    'pagination' => $OUTPUT->render($paginationbar),
 ];
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('local_course_checker/main', $template);

@@ -31,6 +31,13 @@ if ($hassiteconfig) {
     // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedIf
     if ($ADMIN->fulltree) {
         // TO-DO: Define actual plugin settings page and add it to the tree - {@link https://docs.moodle.org/dev/Admin_settings}.
+        $settings->add(new admin_setting_configtext(
+            'local_course_checker/maxresults',
+            get_string('maxresults', 'local_course_checker'),
+            get_string('maxresults_desc', 'local_course_checker'),
+            8,
+            PARAM_INT
+        ));
     }
     $ADMIN->add('reports', new admin_category('local_course_checker_users', get_string('pluginname', 'local_course_checker')));
     $ADMIN->add('local_course_checker_users', new admin_externalpage(
@@ -39,4 +46,5 @@ if ($hassiteconfig) {
         new moodle_url('/local/course_checker/index.php'),
         'moodle/site:config'
     ));
+    $ADMIN->add('localplugins', $settings);
 }
